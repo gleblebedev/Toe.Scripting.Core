@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Toe.Scripting.WPF.Views.LinkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Toe.Scripting.WPF.Views"
+             xmlns:converters="clr-namespace:Toe.Scripting.WPF.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="hiddenItemConverter" True="Collapsed" False="Visible"/>
+        <converters:PointsToConnectionConverter x:Key="pointsToPathConverter" />
+        <!--<converters:PointsToSelectionConverter x:Key="pointsToAreaConverter" />-->
+        <converters:LinkStateToBrushConverter x:Key="pathSelectedBrush" Selected="#FFE4C81A" Data="#FFBBB5B5"
+                                              Execution="#FFFFFF" />
+        <converters:MenuItemViewModelToMenuItemConverter x:Key="menuItemViewModelToMenuItemConverter" />
+    </UserControl.Resources>
+    <Grid LayoutUpdated="UpdatePathLayout"
+          Visibility="{Binding IsHidden, Converter={StaticResource hiddenItemConverter}}">
+        <!--<Path 
+            IsHitTestVisible="True"
+            Data="{Binding Path=Points, Converter={StaticResource ResourceKey=pointsToAreaConverter}}"
+            Fill="#FFffffff"
+            StrokeThickness="1"
+            Stroke="#FFffffff"
+            />-->
+
+        <Path
+            Data="{Binding Path=Points, Converter={StaticResource ResourceKey=pointsToPathConverter}}"
+            MouseLeftButtonDown="HandleMouseLeftButtonDown" MouseLeftButtonUp="HandleMouseLeftButtonUp"
+            MouseRightButtonDown="SelectIfNotSelected"
+            StrokeThickness="2.4"
+            LayoutUpdated="UpdatePathLayout"
+            Stroke="{Binding Path=State, Converter={StaticResource ResourceKey=pathSelectedBrush}}">
+            <Path.ContextMenu>
+                <ContextMenu
+                    ItemsSource="{Binding MenuItems, Converter={StaticResource menuItemViewModelToMenuItemConverter}}" />
+            </Path.ContextMenu>
+        </Path>
+    </Grid>
+</UserControl>

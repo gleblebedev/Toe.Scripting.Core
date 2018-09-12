@@ -1,0 +1,22 @@
+﻿<local:PinControl x:Class="Toe.Scripting.WPF.Views.PinView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:Toe.Scripting.WPF.Views"
+                  xmlns:converters="clr-namespace:Toe.Scripting.WPF.Converters"
+                  mc:Ignorable="d"
+                  d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BooleanToBrushConverter True="#FF0381B9" False="#0002A8F2" x:Key="connectedBrush" />
+        <converters:BooleanToBrushConverter True="#FFF6FF33" False="#FF0AADF7" x:Key="selectedBrush" />
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Border x:Name="_pin" Width="12" Height="12" CornerRadius="6" BorderThickness="3"
+                BorderBrush="{Binding IsSelected, Converter={StaticResource ResourceKey=selectedBrush}}"
+                Background="{Binding IsConnected, Converter={StaticResource ResourceKey=connectedBrush}}" Margin="2"
+                MouseDown="StartConnection"
+                ToolTip="{Binding Type}" />
+        <TextBlock Foreground="White" Text="{Binding Caption}" Margin="2,2,8,2" />
+    </StackPanel>
+</local:PinControl>

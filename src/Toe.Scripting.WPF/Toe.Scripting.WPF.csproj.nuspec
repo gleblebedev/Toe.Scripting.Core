@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Toe.Scripting.WPF</id>
+    <version>0.1.1.0</version>
+    <authors>glebedev</authors>
+    <owners>glebedev</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://tinyopenengine.com</projectUrl>
+    <iconUrl>https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2017/May/11/2699730761-0-toe.contentpipeline-logo_avatar.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>WPF node based editor. Part of TOE: Tiny Open Engine Scripting project.</description>
+    <!--    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes> -->
+    <copyright>Copyright 2018</copyright>
+    <tags>TOE</tags>
+    <dependencies>
+      <dependency id="Toe.Scripting" version="[0.1.1.0,0.2)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src=".\bin\Release\Toe.Scripting.WPF.dll" target="lib\net461" />
+  </files>
+</package>

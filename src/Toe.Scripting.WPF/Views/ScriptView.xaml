@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="Toe.Scripting.WPF.Views.ScriptView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:Toe.Scripting.WPF.ViewModels"
+             xmlns:views="clr-namespace:Toe.Scripting.WPF.Views"
+             xmlns:converters="clr-namespace:Toe.Scripting.WPF.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" Focusable="True">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="hiddenItemConverter" True="Collapsed" False="Visible"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ContextMenu>
+            <ContextMenu x:Name="_contextMenu">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBox x:Name="_searchBar" MinWidth="100"
+                                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+                    </MenuItem.Header>
+                </MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
+
+        <Canvas x:Name="_outerCanvas"
+                MouseLeftButtonDown="StartSelection"
+                MouseLeftButtonUp="StopMultiselect"
+                MouseRightButtonDown="StartPanning"
+                PreviewMouseRightButtonUp="StopPanning"
+                ClipToBounds="True"
+                MouseWheel="Zoom"
+                MouseMove="HandleMouseMove">
+            <Canvas.Background>
+                <ImageBrush ImageSource="../Images/background.png" ViewportUnits="Absolute"
+                            Viewport="0,0,256,256" TileMode="Tile" />
+            </Canvas.Background>
+            <ItemsControl x:Name="_innerCanvas" 
+                          Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}"
+                          Visibility="{Binding IsHidden, Converter={StaticResource hiddenItemConverter}}"
+                          ItemsSource="{Binding Items}">
+                <ItemsControl.RenderTransform>
+                    <MatrixTransform x:Name="_scale" Matrix="{Binding ScaleMatrix}" />
+                </ItemsControl.RenderTransform>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas LayoutUpdated="RearrangeIfNeeded" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type viewModels:ConstantNodeViewModel}">
+                        <views:ConstantNodeView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:ConnectorNodeViewModel}">
+                        <views:ConnectorView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:NodeViewModel}">
+                        <views:NodeView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:LinkViewModel}">
+                        <views:LinkView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:GroupViewModel}">
+                        <views:GroupView />
+                    </DataTemplate>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding Path=Position.X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Path=Position.Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+            <Rectangle x:Name="_selectionRect" Visibility="Collapsed" Width="100" Height="100" Stroke="White"
+                       StrokeDashArray="4 2" StrokeThickness="1" />
+        </Canvas>
+    </Grid>
+</UserControl>
